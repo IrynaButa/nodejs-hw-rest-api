@@ -38,7 +38,7 @@ const removeContact = async (contactId) => {
     const updatedList = contacts.filter(({ id }) => String(id) !== String(contactId));
 
       
-      await fs.writeFile(
+     fs.writeFile(
       contactsPath,
       JSON.stringify(updatedList, null, 2),
       "utf-8"
@@ -69,7 +69,30 @@ try {
 
 }
 
-const updateContact = async (contactId, body) => {}
+const updateContact = async (contactId, body) => {
+  try {
+    const data = await fs.readFile(contactsPath, "utf-8");
+    const contacts = JSON.parse(data);
+    const updatedContact = await contacts.find(
+      (contact) => {
+       if (String(contact.id) === String(contactId)) {
+        contact.name = body.name ?? contact.name;
+        contact.email = body.email ?? contact.email;
+        contact.phone = body.phone ?? contact.phone;
+        return contact;
+      }
+    });
+    return updatedContact;
+    const updatedList = [...contacts];
+   
+    await fs.writeFile(contactsPath, JSON.stringify(updatedList, null, 2), "utf-8");
+    return contactId ? updatedContact : null;
+
+
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 module.exports = {
   listContacts,
@@ -80,53 +103,3 @@ module.exports = {
 }
  
 
-
-// async function listContacts() {
-  
-// }
-
-// async function getContactById(contactId) {
-  
-// }
-
-// async function removeContact(contactId) {
-//   try {
-//     const data = await fs.readFile(contactsPath, "utf-8");
-//     const contacts = JSON.parse(data);
-//     const updatedList = contacts.filter(({ id }) => String(id) !== String(contactId));
-
-      
-//       await fs.writeFile(
-//       contactsPath,
-//       JSON.stringify(updatedList, null, 2),
-//       "utf-8"
-//     );
-//     console.log("Contact has been removed");
-//   } catch (error) {
-//     console.log(error);
-//   }
-// }
-
-// async function addContact(name, email, phone) {
-//   try {
-//     const newContact = {
-//       id: nanoid(5),
-//       name,
-//       email,
-//       phone,
-//     };
-//     const data = await fs.readFile(contactsPath, "utf-8");
-//     const contacts = JSON.parse(data);
-//     const updatedList = [newContact, ...contacts];
-//     fs.writeFile(contactsPath, JSON.stringify(updatedList, null, 2), "utf-8");
-//     console.log(`Contact has been added`);
-//   } catch (error) {
-//     console.log(error);
-//   }
-// }
-// module.exports = {
-//   listContacts,
-//   getContactById,
-//   removeContact,
-//   addContact,
-// };
