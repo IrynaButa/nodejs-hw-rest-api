@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const Contact = require('../../model');
-
+const validate = require('./validation')
 
 router.get('/', async (_req, res, next) => {
   try {
@@ -44,10 +44,11 @@ router.post('/', async (req, res, next) => {
 router.delete('/:contactId', async (req, res, next) => {
  try {
     const contact = await Contact.removeContact(req.params.contactId);
-    // if (!contact) {
-    //   return res.status(404).json({ message: 'Not foundввввв' });
-    // }
-    return res.status(200).json({status: 'success', code: 201, message: 'contact deleted' });
+    if (contact) {
+       return res.status(200).json({status: 'success', code: 201, data: { contact }  });
+      
+    }
+   return res.status(404).json({ message: 'Not found' });
   } catch (error) {
     next(error);
   }
@@ -57,10 +58,10 @@ router.put('/:contactId', async (req, res, next) => {
   try {
     const contact = await Contact.updateContact(req.params.contactId, req.body);
     if (contact) {
-       return res.status(200).json({status: 'success', code: 201, message: 'contact updated' });
+       return res.status(200).json({status: 'success', code: 201, data: { contact }  });
       
     }
-   return res.status(404).json({ message: 'Not foundввввв' });
+   return res.status(404).json({ message: 'Not found' });
   } catch (error) {
     next(error);
   }
