@@ -28,7 +28,7 @@ router.get('/:contactId', async (req, res, next) => {
 
 })
 
-router.post('/', async (req, res, next) => {
+router.post('/', validate.addContact, async (req, res, next) => {
   try {
     const contact = await Contact.addContact(req.body);
     if (!contact) {
@@ -54,7 +54,7 @@ router.delete('/:contactId', async (req, res, next) => {
   }
 })
 
-router.put('/:contactId', async (req, res, next) => {
+router.put('/:contactId', validate.updateContact, async (req, res, next) => {
   try {
     const contact = await Contact.updateContact(req.params.contactId, req.body);
     if (contact) {

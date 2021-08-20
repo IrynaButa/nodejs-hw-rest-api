@@ -1,7 +1,7 @@
 const Joi = require('joi');
 
 const schemaCreate = Joi.object({
-    username: Joi.string()
+    name: Joi.string()
         .alphanum()
         .min(3)
         .max(30)
@@ -9,14 +9,14 @@ const schemaCreate = Joi.object({
 
 
     email: Joi.string()
-        .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }),
+        .email({ minDomainSegments: 2 }),
     phone: Joi.string()
         .required(),
 })
     
 
 const schemaUpdate = Joi.object({
-    username: Joi.string()
+    name: Joi.string()
         .alphanum()
         .min(3)
         .max(30)
@@ -24,9 +24,9 @@ const schemaUpdate = Joi.object({
 
 
     email: Joi.string()
-        .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }),
+        .email({ minDomainSegments: 2 }),
     phone: Joi.string()
-        .required(),
+        .optional(),
 }).min(1);
 
 const validate = (schema, obj, next) => {
@@ -35,7 +35,7 @@ const validate = (schema, obj, next) => {
         const [{ message }] = error.details
         return next({
             status: 400,
-            message: `Filed: ${message.replace(/"/g, '')}`,
+            message: `Failed: ${message.replace(/"/g, '')}`,
         })
     }
     next()

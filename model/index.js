@@ -58,10 +58,14 @@ const addContact = async (body) => {
 
   try {
     const contacts = await readContacts()
-    const newContact = {
+    
+      const newContact = {
+     
       id: nanoid(5),
       ...body,
     };
+    
+   
     
     const updatedList = [newContact, ...contacts];
    await writeContacts(updatedList);
