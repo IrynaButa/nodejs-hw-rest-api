@@ -6,11 +6,11 @@ const validate = require('../validation')
 router.get('/', ctrl.listContacts).post('/', validate.addContact, ctrl.addContact)
 
 router
-  .get('/:contactId', ctrl.getContactById)
-  .delete('/:contactId', ctrl.removeContact)
+  .get('/:contactId', validate.validateMongoId, ctrl.getContactById)
+  .delete('/:contactId', validate.validateMongoId, ctrl.removeContact)
   .put('/:contactId', validate.updateContact, ctrl.updateContact)
 
 router
-  .patch('/:contactId/favorite', ctrl.getFavorite)
+  .patch('/:contactId/favorite', validate.validateMongoId, ctrl.getFavorite)
 
 module.exports = router
