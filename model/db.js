@@ -1,18 +1,24 @@
-const { MongoClient } = require('mongodb')
+const mongoose = require('mongoose')
 require('dotenv').config()
 const uriDb = process.env.URI_DB
 
-const db = MongoClient.connect(uriDb, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    poolSize:5
+const db = mongoose.connect(uriDb, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+
+})
+mongoose.connection.on('connected', () => {
+  console.log('Connection open')
+})
+mongoose.connection.on('disconnected', (e) => {
+  console.log('Connection closed')
 })
 
 process.on('SIGINT', async () => {
-    const client = await db
-    client.close()
+  mongoose.connection.close(() => {
     console.log('Database connection successful')
     process.exit(1)
+  })
 })
 
 module.exports = db
