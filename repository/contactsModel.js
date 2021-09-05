@@ -1,4 +1,4 @@
-const Contact = require('./contactShema')
+const Contact = require('../model/contactShema')
 
 
 const listContacts = async () => {

@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const ctrl = require('../../controllers/contactsCtrl')
+const ctrl = require('../../../controllers/contactsCtrl')
 const validate = require('./validation')
 
 router.get('/', ctrl.listContacts).post('/', validate.addContact, ctrl.addContact)
