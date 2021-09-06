@@ -63,8 +63,8 @@ const login = async (req, res, next) => {
 };
 
 const logout = async (req, res, next) => {
-  const id = req.user.id;
-  const user = await Users.findUserById(id);
+  const userId = req.user.id;
+  const user = await Users.findUserById(userId);
 
   if (!user) {
     return res
@@ -73,7 +73,7 @@ const logout = async (req, res, next) => {
       .json({ message: 'Not authorized' });
   }
 
-  await Users.updateToken(id, null);
+  await Users.updateToken(userId, null);
 
   return res.status(HttpCode.NO_CONTENT).json({});
 };
