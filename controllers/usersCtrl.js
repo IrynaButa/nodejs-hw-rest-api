@@ -32,6 +32,7 @@ const signup = async (req, res, next) => {
         user: {
           email: newUser.email,
           subscription: newUser.subscription,
+          avatar:newUser.avatar
         },
       });
   } catch (error) {
