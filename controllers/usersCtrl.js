@@ -1,4 +1,4 @@
-const fs = require('fs/promises')
+const fs = require('fs/promises').promises;
 const path = require('path');
 const Jimp = require('jimp');
 const jwt = require('jsonwebtoken');
