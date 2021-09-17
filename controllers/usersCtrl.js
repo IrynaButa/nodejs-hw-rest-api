@@ -189,12 +189,36 @@ const verification = async (req, res, next) => {
   try {
     const user = Users.findByVerificationToken(req.params.verificationToken);
     if (!user) {
-      return res.status(HttpCode.NOT_FOUND).json({ message: 'Not Found' });
+      return res.status(HttpCode.BAD_REQEST).json({ message: 'Bad request. User have not been found' });
     }
     await Users.updateVerificationToken(user.id, true, null);
     return res
       .status(HttpCode.OK)
-      .json({ message: 'Verification is successful' });
+      .json({ message: 'Verification email sent' });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const repeatVerification = async (req, res, next) => {
+  try {
+   
+    const user = await Users.findByEmail(req.body.email);
+    if (user) {
+      const { name, email, verification, verificationToken} = user
+    if (!verification) {
+      const emailService = new EmailService(process.env.NODE_ENV, new CreateSenderSG())
+     await emailService.sendEmail(verificationToken, email, name);
+    return res
+      .status(HttpCode.OK)
+      .json({ message: 'Resubmitted successfully' });
+      }
+       return res
+        .status(HttpCode.CONFLICT)
+        .type('application/json')
+        .json({ message: 'Email has been verified' });
+    }
+    
   } catch (error) {
     next(error);
   }
@@ -207,5 +231,6 @@ module.exports = {
   checkUserByToken,
   updateUserSubscription,
   avatars,
-verification,
+  verification,
+repeatVerification,
 };
