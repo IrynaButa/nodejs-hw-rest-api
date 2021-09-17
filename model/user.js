@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const gr = require('gravatar')
+const {nanoid} = require ('nanoid')
 const { Schema, model } = mongoose
 const bcrypt = require('bcryptjs');
 const {Subscription } = require('../helper/const')
@@ -38,7 +39,16 @@ const userSchema = new Schema(
       default: function () {
         return gr.url(this.email, {s: '250'}, true)
       }
-    }
+    },
+    verification: {
+    type: Boolean,
+    default: false,
+  },
+   verificationToken: {
+    type: String,
+    required: [true, 'Verify token is required'],
+    default: nanoid(),
+  },
     },
   
   { versionKey: false, timestamps: true },
